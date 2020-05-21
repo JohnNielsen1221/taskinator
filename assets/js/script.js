@@ -172,7 +172,7 @@ var deleteTask = function(taskId) {
     for (var i = 0; i < tasks.length; i++) {
         //if tasks[i].id doesn't match the value of taskId, let's keep that task and push it into the new array
         if (tasks[i].id !== parseInt(taskId)) {
-            updatedTaskArr.push(task[i]);
+            updatedTaskArr.push(tasks[i]);
         }
     }
 
@@ -263,6 +263,22 @@ var saveTasks = function() {
     localStorage.setItem('tasks', JSON.stringify(tasks));
 };
 
+var loadTasks = function() {
+    // get tasks from local storage
+    var savedTasks = localStorage.getItem('tasks');
+    if (!savedTasks) {
+        return false;
+    }
+    // converts tasks from the stringified format back into an array of objects
+    savedTasks = JSON.parse(savedTasks);
+    
+    // itereates through tasks array and creates task elements on the page from it
+    for (var i = 0; i < savedTasks.length; i++) {
+        //pass each task object into the createTaskEl() function
+        createTaskEl(savedTasks[i]);
+    }
+};
+
 pageContentEl.addEventListener('click', taskButtonHandler);
 
 pageContentEl.addEventListener('change', taskStatusChangeHandler);
@@ -274,3 +290,5 @@ pageContentEl.addEventListener('dragover', dropZoneDragHandler);
 pageContentEl.addEventListener('drop', dropTaskHandler);
 
 pageContentEl.addEventListener('dragleave', dragLeaveHandler);
+
+loadTasks();
